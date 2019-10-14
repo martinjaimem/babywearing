@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
+
 RSpec.describe Cart do
   fixtures(:users)
 
-  let(:member)    { users(:user) }
-  let(:volunteer) { users(:volunteer) }
-
-  describe '#valid?' do
-    context "with a member and a volunteer" do
-      subject { described_class.new(member: member, volunteer: volunteer) }
-
-      it 'returns true' do
-        expect(subject).to be_valid
-      end
-    end
+  context "validations" do
+    it { is_expected.to have_many(:loans) }
+    it { is_expected.to validate_presence_of(:volunteer) }
+    it { is_expected.to belong_to(:volunteer) }
+    it { is_expected.to validate_presence_of(:member) }
+    it { is_expected.to belong_to(:member) }
   end
 
   describe '#line_items' do
     fixtures(:carriers)
+
+    let(:member)    { users(:user) }
+    let(:volunteer) { users(:volunteer) }
 
     let(:carrier)  { carriers(:carrier) }
     let(:due_date) { Date.today + 1.days }
